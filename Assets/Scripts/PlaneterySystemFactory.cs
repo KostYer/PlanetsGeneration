@@ -28,6 +28,7 @@ namespace Planets
 
         [SerializeField] protected Button _genetateButton;
         private GameObject _centerStar;
+        private bool _isFirstGeneration = true;
         private void Start()
         {
             _genetateButton.onClick.AddListener(GenetatePlanets);
@@ -40,12 +41,14 @@ namespace Planets
             var planetSystem=  Create(_totalMass);
             CreateCenterStar();
             _planetsPositioner.Init(planetSystem.Planets.ToList());
+            _isFirstGeneration = false;
+
         }
         
         
         private void TryDestoryPlanets()
         {
-            if (_planeterySystem == null || !_planeterySystem.Planets.Any())
+            if (_isFirstGeneration)
             {
                 return;
             }
@@ -65,7 +68,7 @@ namespace Planets
 
         public IPlaneterySystem Create(float mass)
         {
-            if (_planeterySystem == null)
+            if (_isFirstGeneration)
             {
                 _planeterySystem = new GameObject(planetSystemName).AddComponent<PlaneterySystem>();
             }
@@ -153,7 +156,7 @@ namespace Planets
 
         private void CreateCenterStar()
         {
-            if (_centerStar != null)
+            if (!_isFirstGeneration)
             {
                 return; 
             }
